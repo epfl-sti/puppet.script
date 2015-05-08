@@ -15,33 +15,48 @@
 
 ## Overview
 
-A one-maybe-two sentence summary of what the module does/what problem it solves.
-This is your 30 second elevator pitch for your module. Consider including
-OS/Puppet version it works with.
+The script module makes it easy to distribute ad-hoc scripts to Puppet agents.
 
 ## Module Description
 
-If applicable, this section should have a brief description of the technology
-the module integrates with and what that integration enables. This section
-should answer the questions: "What does this module *do*?" and "Why would I use
-it?"
+The script module lets you create scripts in your Puppet code as easily as this:
 
-If your module has a range of functionality (installation, configuration,
-management, etc.) this is the time to mention it.
+~~~
+script { "foo.pl":
+  ensure => present,
+  language => "perl",
+  content => template("mymodule/foo.pl")
+}
+~~~
+
+You can then just create `mymodule/templates/foo.pl`. You may use
+[Puppet templating](https://docs.puppetlabs.com/guides/templating.html)
+escapes like `<% %>` and `<%= %>`, but you don't have to.
+
+In order to execute the script, you can just say
+
+~~~
+exec { "$script::dir/foo.pl":
+   onlyif => "$(hostname) == 'zoinx'",  # Optional
+   require => Script["foo.pl"]
+}
+~~~
+
+or even better, you can combine the two declarations like this:
+
+~~~
+script { "foo.pl":
+   # [...]
+} -> exec { "$script::dir/foo.pl":
+   onlyif => "$(hostname) == 'zoinx'"
+}
+~~~
 
 ## Setup
 
 ### What script affects
 
-* A list of files, packages, services, or operations that the module will alter,
-  impact, or execute on the system it's installed on.
-* This is a great place to stick any warnings.
-* Can be in list or paragraph form.
-
-### Setup Requirements **OPTIONAL**
-
-If your module requires anything extra before setting up (pluginsync enabled,
-etc.), mention it here.
+* Adds a `script/` directory into Puppet's `vardir`.
 
 ### Beginning with script
 
