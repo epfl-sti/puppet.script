@@ -1,0 +1,14 @@
+{
+  "name": "domq-script",
+  "version": "0.0.1",
+  "author": "domq",
+  "summary": "Deploy and execute scripts onto Puppet agents",
+  "license": "MIT",
+  "source": "https://github.com/epfl-sti/puppet-script",
+  "issues_url": "https://github.com/epfl-sti/puppet-script/issues",
+  "project_page": "https://github.com/epfl-sti/puppet-script",
+  "dependencies": [
+    {"version_requirement":">= 1.0.0","name":"puppetlabs-stdlib"}
+  ]
+}
+
